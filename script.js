@@ -32,7 +32,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Aplicar animación a elementos
 document.addEventListener('DOMContentLoaded', () => {
-    const revealElements = document.querySelectorAll('.content-wrapper, .cards-grid, .checklist, .autora-content, .garantia-box, .manifiesto, .descripcion-box');
+    const revealElements = document.querySelectorAll('.content-wrapper, .cards-grid, .checklist, .autora-content, .manifiesto, .descripcion-box, .comentarios-grid');
     
     revealElements.forEach(el => {
         el.classList.add('reveal');
@@ -86,25 +86,31 @@ document.querySelectorAll('.btn-agregar-carrito').forEach(button => {
     button.addEventListener('click', function(e) {
         e.preventDefault();
         
-        // Tracking para analytics (opcional)
-        console.log('CTA clicked: Agregar al carrito');
+        // Tracking para analytics
+        const timestamp = new Date().toISOString();
+        const clickData = {
+            timestamp: timestamp,
+            button: 'Agregar al carrito',
+            product: 'Calendario Astrológico 2026',
+            price: 15,
+            currency: 'USD'
+        };
         
-        // Google Analytics (si lo tienes configurado)
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'add_to_cart', {
-                'event_category': 'ecommerce',
-                'event_label': 'Calendario Astrológico 2026',
-                'value': 10,
-                'currency': 'USD'
-            });
-        }
+        // Guardar en localStorage para analytics
+        let clicks = JSON.parse(localStorage.getItem('cart_clicks') || '[]');
+        clicks.push(clickData);
+        localStorage.setItem('cart_clicks', JSON.stringify(clicks));
+        
+        // Log en consola
+        console.log('CTA clicked:', clickData);
+        console.log('Total clicks:', clicks.length);
         
         // Facebook Pixel (si lo tienes configurado)
         if (typeof fbq !== 'undefined') {
             fbq('track', 'InitiateCheckout', {
                 content_name: 'Calendario Astrológico 2026',
                 content_category: 'Producto Digital',
-                value: 10,
+                value: 15,
                 currency: 'USD'
             });
         }
@@ -119,6 +125,28 @@ document.querySelectorAll('.btn-agregar-carrito').forEach(button => {
         }
     });
 });
+
+// ============================================
+// FUNCIÓN PARA VER ESTADÍSTICAS DE CLICKS
+// ============================================
+// Ejecuta esto en la consola del navegador para ver las estadísticas:
+// verEstadisticasClicks()
+function verEstadisticasClicks() {
+    const clicks = JSON.parse(localStorage.getItem('cart_clicks') || '[]');
+    console.log('=== ESTADÍSTICAS DE CLICKS ===');
+    console.log('Total de clicks:', clicks.length);
+    console.log('Todos los clicks:', clicks);
+    
+    // Agrupar por fecha
+    const porFecha = {};
+    clicks.forEach(click => {
+        const fecha = click.timestamp.split('T')[0];
+        porFecha[fecha] = (porFecha[fecha] || 0) + 1;
+    });
+    console.log('Clicks por fecha:', porFecha);
+    
+    return clicks;
+}
 
 // ============================================
 // EFECTO DE GLOW EN CARDS AL HOVER
