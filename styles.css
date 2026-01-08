@@ -78,6 +78,116 @@ body {
 }
 
 /* ============================================
+   SIDEBAR FLOTANTE CON OFERTA Y COUNTDOWN
+   ============================================ */
+.floating-offer-sidebar {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-120%);
+    z-index: 999;
+    transition: transform 0.4s ease;
+    width: 200px;
+}
+
+.floating-offer-sidebar.visible {
+    transform: translateY(-50%) translateX(0);
+}
+
+.floating-offer-content {
+    background: linear-gradient(135deg, #1E3A5F 0%, #0A1628 100%);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--color-gold);
+    border-radius: 16px;
+    padding: var(--spacing-md);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
+    text-align: center;
+}
+
+.floating-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.floating-price-old {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+}
+
+.floating-price-new {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    font-family: var(--font-display);
+}
+
+.floating-countdown {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    padding: var(--spacing-xs) 0;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.countdown-label-small {
+    font-size: 0.7rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.countdown-timer {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-gold-light);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+.countdown-timer.warning {
+    color: #ff6b6b;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.btn-floating-compra {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--bg-primary);
+    background: var(--color-gold);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+    margin-top: var(--spacing-xs);
+}
+
+.btn-floating-compra:hover {
+    background: var(--color-gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+}
+
+/* ============================================
    HERO PRODUCTO (TIPO ECOMMERCE)
    ============================================ */
 .hero-producto {
@@ -86,9 +196,9 @@ body {
     align-items: center;
     position: relative;
     background: linear-gradient(135deg, #0A1628 0%, #1E3A5F 50%, #2D4A6F 100%);
-    overflow: hidden;
+    overflow: visible; /* Cambiado de hidden a visible */
     padding: var(--spacing-2xl) 0;
-    z-index: 1; /* Base para el sticky */
+    z-index: 1;
 }
 
 .stars-bg {
@@ -319,7 +429,7 @@ body {
     background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     padding: var(--spacing-2xl) 0;
     position: relative;
-    z-index: 3; /* Por encima del hero sticky */
+    z-index: 1; /* Mismo nivel que otras secciones */
 }
 
 .section-title {
@@ -401,11 +511,100 @@ body {
 }
 
 /* ============================================
-   COMENTARIOS / TESTIMONIOS
+   RESEÑAS DEL PRODUCTO
    ============================================ */
-.comentarios-section {
+.reviews-section {
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    padding: var(--spacing-2xl) 0;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.review-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: rgba(212, 175, 55, 0.4);
+}
+
+.review-header {
+    margin-bottom: var(--spacing-md);
+}
+
+.review-stars {
+    color: var(--color-gold);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-xs);
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 1rem;
+}
+
+.review-author strong {
+    color: var(--color-white-warm);
+    font-weight: 500;
+}
+
+.review-verified {
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    font-weight: 300;
+}
+
+.review-content {
+    flex-grow: 1;
+    margin-bottom: var(--spacing-md);
+}
+
+.review-content p {
+    color: var(--color-text);
+    line-height: 1.7;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.review-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: auto;
+}
+
+/* ============================================
+   TESTIMONIOS SOBRE SONIA
+   ============================================ */
+.testimonios-section {
     background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     padding: var(--spacing-2xl) 0;
+}
+
+.testimonios-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-lg);
+    font-style: italic;
 }
 
 .comentarios-grid {
@@ -413,28 +612,37 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--spacing-md);
     margin-top: var(--spacing-xl);
+    align-items: start;
 }
 
 .comentario-item {
-    background: var(--bg-card);
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius);
-    border: var(--border-gold);
+    background: rgba(30, 58, 95, 0.4);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.15);
     overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: block;
+    line-height: 0;
 }
 
 .comentario-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-card);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(212, 175, 55, 0.3);
 }
 
 .comentario-item img {
     width: 100%;
     height: auto;
     display: block;
-    object-fit: cover;
+    margin: 0;
+    padding: 0;
+    border-radius: 12px;
 }
 
 /* ============================================
@@ -848,6 +1056,28 @@ body {
         padding: var(--spacing-lg) 0;
     }
 
+    .floating-offer-sidebar {
+        left: 10px;
+        width: 160px;
+    }
+
+    .floating-offer-content {
+        padding: var(--spacing-sm);
+    }
+
+    .floating-price-new {
+        font-size: 1.5rem;
+    }
+
+    .countdown-timer {
+        font-size: 1rem;
+    }
+
+    .btn-floating-compra {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
     .producto-info {
         z-index: 20; /* Asegura que el botón esté sobre todo en móvil */
     }
@@ -866,6 +1096,11 @@ body {
     .cards-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-sm);
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
 
     .comentarios-grid {

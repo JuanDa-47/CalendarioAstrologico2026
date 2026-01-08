@@ -64,20 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// PARALLAX SUAVE EN HERO
+// PARALLAX SUAVE EN HERO (Desactivado para evitar problemas)
 // ============================================
-let lastScroll = 0;
-const hero = document.querySelector('.hero-producto');
-
-if (hero) {
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        if (scrolled < hero.offsetHeight && scrolled >= 0) {
-            const parallax = scrolled * 0.3;
-            hero.style.transform = `translateY(${parallax}px)`;
-        }
-    }, { passive: true });
-}
+// Parallax desactivado para evitar que el hero se oculte al hacer scroll
 
 // ============================================
 // TRACKING DE EVENTOS Y REDIRECCIÓN AL PAGO
@@ -156,6 +145,65 @@ featureCards.forEach(card => {
     card.addEventListener('mouseenter', function() {
         this.style.transition = 'all 0.4s ease';
     });
+});
+
+// ============================================
+// STICKY OFFER BAR CON COUNTDOWN
+// ============================================
+let countdownMinutes = 15;
+let countdownSeconds = 0;
+let countdownInterval = null;
+
+function startCountdown() {
+    const timerElement = document.getElementById('countdownTimer');
+    if (!timerElement) return;
+
+    countdownInterval = setInterval(() => {
+        if (countdownSeconds === 0) {
+            if (countdownMinutes === 0) {
+                // Countdown terminado, reiniciar
+                countdownMinutes = 15;
+                countdownSeconds = 0;
+            } else {
+                countdownMinutes--;
+                countdownSeconds = 59;
+            }
+        } else {
+            countdownSeconds--;
+        }
+
+        // Formatear tiempo
+        const minutes = countdownMinutes.toString().padStart(2, '0');
+        const seconds = countdownSeconds.toString().padStart(2, '0');
+        timerElement.textContent = `${minutes}:${seconds}`;
+
+        // Agregar clase warning cuando quedan menos de 5 minutos
+        if (countdownMinutes < 5) {
+            timerElement.classList.add('warning');
+        } else {
+            timerElement.classList.remove('warning');
+        }
+    }, 1000);
+}
+
+function showStickyBar() {
+    const floatingSidebar = document.getElementById('floatingOfferSidebar');
+    if (!floatingSidebar) return;
+
+    // Mostrar después de hacer scroll 200px
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+            floatingSidebar.classList.add('visible');
+        } else {
+            floatingSidebar.classList.remove('visible');
+        }
+    }, { passive: true });
+}
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    startCountdown();
+    showStickyBar();
 });
 
 // ============================================
