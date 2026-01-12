@@ -12,12 +12,14 @@
 <body>
     <!-- Sidebar Flotante con Oferta y Countdown -->
     <div class="floating-offer-sidebar" id="floatingOfferSidebar">
+        <button class="close-sidebar-btn" id="closeSidebarBtn" aria-label="Cerrar">×</button>
         <div class="floating-offer-content">
-            <div class="floating-price">
-                <span class="floating-price-old">$25</span>
-                <span class="floating-price-new">$15</span>
+            <div class="floating-price" id="floatingPriceContainer">
+                <span class="floating-price-old" id="oldPrice">$25</span>
+                <span class="floating-price-new" id="newPrice">$15</span>
+                <span class="floating-price-final" id="finalPrice" style="display: none;">$25</span>
             </div>
-            <div class="floating-countdown">
+            <div class="floating-countdown" id="countdownContainer">
                 <div class="countdown-label-small">Termina en:</div>
                 <div class="countdown-timer" id="countdownTimer">15:00</div>
             </div>
@@ -167,9 +169,11 @@
                     <div class="review-content">
                         <p>"Perfecto para los nuevos en este tema. Con base en este calendario, generé mi carta astral y me encantó poder entender mi ascendente, casas principales y retrogradaciones."</p>
                     </div>
-                    <div class="review-date">Hace 1 dia</div>
+                    <div class="review-date" data-date-attr="2025-01-15">Hace 2 semanas</div>
                 </div>
-                
+
+                <!-- Reseñas comentadas - Descomenta cuando tengas más reseñas reales -->
+                <!--
                 <!-- Reseña 2 -->
                 <div class="review-card">
                     <div class="review-header">
@@ -182,7 +186,7 @@
                     <div class="review-content">
                         <p>"Me encantó. Está lleno de sabiduría, tan claro y tan mágico ✨. Lo uso todos los días para planificar mis actividades importantes."</p>
                     </div>
-                    <div class="review-date">Hace 1 dia</div>
+                    <div class="review-date" data-date-attr="2026-01-03">Hace 1 mes</div>
                 </div>
 
                 <!-- Reseña 3 -->
@@ -197,7 +201,7 @@
                     <div class="review-content">
                         <p>"Encantada con toda la información! Es clara, directa, bien escrita y bien organizada. Gracias por esta herramienta tan valiosa 🌟🔮💕"</p>
                     </div>
-                    <div class="review-date">Hoy</div>
+                    <div class="review-date" data-date-attr="2026-01-06">Hace 3 semanas</div>
                 </div>
 
                 <!-- Reseña 4 -->
@@ -212,8 +216,39 @@
                     <div class="review-content">
                         <p>"Lo recibí 2 minutos después del pago. Empecé a leerlo ayer y estoy fascinada. El precio es muy bueno para todo lo que incluye. ¡100% recomendado!"</p>
                     </div>
-                    <div class="review-date">Hoy/div>
+                    <div class="review-date" data-date-attr="2024-11-15">Hace 2 meses</div>
                 </div>
+
+                <!-- Reseña 5 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-author">
+                            <strong>Patricia S.</strong>
+                            <span class="review-verified">✓ Verificada</span>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        <p>"Un espacio mágico para ampliar conocimientos y ganar sabiduría. Me encantó, y las explicaciones son tan claras que no necesitas saber astrología previa."</p>
+                    </div>
+                    <div class="review-date" data-date-attr="2024-12-20">Hace 1 mes</div>
+                </div>
+
+                <!-- Reseña 6 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-author">
+                            <strong>Isabel F.</strong>
+                            <span class="review-verified">✓ Verificada</span>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        <p>"Sonia es una joya de la astrología. Su enfoque humanístico permite informarnos pero a la vez saber las causas y lo más importante, el cómo superar las dificultades."</p>
+                    </div>
+                    <div class="review-date" data-date-attr="2025-01-05">Hace 3 semanas</div>
+                </div>
+                -->
             </div>
         </div>
     </section>
@@ -316,13 +351,6 @@
             <h2 class="section-title">Preguntas Frecuentes</h2>
             <div class="faq-list">
                 <div class="faq-item">
-                    <h3 class="faq-pregunta">¿Tengo que saber astrología para usar este calendario?</h3>
-                    <div class="faq-respuesta">
-                        <p><strong>Para nada.</strong> No necesitas conocimientos previos de astrología. El calendario está diseñado como una guía consciente, paso a paso, con todo explicado de manera sencilla. Solo necesitas abrirte a observar y experimentar cómo los ciclos se reflejan en tu propia experiencia.</p>
-                    </div>
-                </div>
-                
-                <div class="faq-item">
                     <h3 class="faq-pregunta">¿Por qué confiar en este calendario si hay tanta información gratis en internet?</h3>
                     <div class="faq-respuesta">
                         <p>Porque este calendario no es solo información suelta, es una guía ordenada, consciente, ordenada con modulos que te llevan a una comprensión clara de los cambios y ritmos del cielo con material de apoyo para aplicarlos a tu carta astral.</p>
@@ -340,7 +368,7 @@
                 <div class="faq-item">
                     <h3 class="faq-pregunta">¿Cómo lo recibo y cuánto tarda en llegar?</h3>
                     <div class="faq-respuesta">
-                        <p><strong>Te lo enviamos por correo electrónico automáticamente</strong>, apenas confirmes tu compra. Lo vas a recibir en segundos. Si no lo ves, revisa la carpeta de spam o promociones... a veces la magia cae ahí por accidente.</p>
+                        <p><strong>Recibes el acceso inmediatamente después de completar tu pago.</strong> El calendario se entrega directamente como descarga digital. No hay que esperar correos ni envíos. Una vez que pagas, tienes acceso instantáneo al PDF para descargarlo cuantas veces necesites.</p>
                     </div>
                 </div>
 
@@ -382,4 +410,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-

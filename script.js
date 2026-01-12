@@ -153,17 +153,25 @@ featureCards.forEach(card => {
 let countdownMinutes = 15;
 let countdownSeconds = 0;
 let countdownInterval = null;
+let offerExpired = false;
 
 function startCountdown() {
     const timerElement = document.getElementById('countdownTimer');
+    const oldPriceElement = document.getElementById('oldPrice');
+    const newPriceElement = document.getElementById('newPrice');
+    const finalPriceElement = document.getElementById('finalPrice');
+    const countdownContainer = document.getElementById('countdownContainer');
+    const priceContainer = document.getElementById('floatingPriceContainer');
+    
     if (!timerElement) return;
 
     countdownInterval = setInterval(() => {
         if (countdownSeconds === 0) {
             if (countdownMinutes === 0) {
-                // Countdown terminado, reiniciar
-                countdownMinutes = 15;
-                countdownSeconds = 0;
+                // Countdown terminado - cambiar precio
+                clearInterval(countdownInterval);
+                expireOffer();
+                return;
             } else {
                 countdownMinutes--;
                 countdownSeconds = 59;
@@ -186,24 +194,141 @@ function startCountdown() {
     }, 1000);
 }
 
+function expireOffer() {
+    offerExpired = true;
+    const oldPriceElement = document.getElementById('oldPrice');
+    const newPriceElement = document.getElementById('newPrice');
+    const finalPriceElement = document.getElementById('finalPrice');
+    const countdownContainer = document.getElementById('countdownContainer');
+    const priceContainer = document.getElementById('floatingPriceContainer');
+    
+    if (!oldPriceElement || !newPriceElement || !finalPriceElement) return;
+
+    // Ocultar countdown
+    if (countdownContainer) {
+        countdownContainer.style.display = 'none';
+    }
+
+    // Agregar clase para animación
+    priceContainer.classList.add('price-expired');
+
+    // Mover $15 a la posición de $25 (tachado)
+    oldPriceElement.textContent = '$15';
+    oldPriceElement.classList.add('price-moved');
+    
+    // Ocultar $15 original
+    newPriceElement.style.display = 'none';
+    
+    // Mostrar $25 como precio final
+    finalPriceElement.style.display = 'block';
+    finalPriceElement.classList.add('price-final-visible');
+}
+
 function showStickyBar() {
     const floatingSidebar = document.getElementById('floatingOfferSidebar');
-    if (!floatingSidebar) return;
+    const closeBtn = document.getElementById('closeSidebarBtn');
+    
+    if (!floatingSidebar) {
+        console.error('floatingOfferSidebar no encontrado');
+        return;
+    }
 
-    // Mostrar después de hacer scroll 200px
-    window.addEventListener('scroll', () => {
+    // Verificar si el usuario ya cerró el sidebar (localStorage)
+    const sidebarClosed = localStorage.getItem('sidebarClosed');
+    if (sidebarClosed === 'true') {
+        floatingSidebar.classList.add('hidden');
+        return;
+    }
+
+    // Asegurar que el sidebar no tenga la clase hidden inicialmente
+    floatingSidebar.classList.remove('hidden');
+
+    // Función para mostrar/ocultar según scroll
+    function handleScroll() {
+        if (floatingSidebar.classList.contains('hidden')) return;
+        
         if (window.scrollY > 200) {
             floatingSidebar.classList.add('visible');
         } else {
             floatingSidebar.classList.remove('visible');
         }
-    }, { passive: true });
+    }
+
+    // Mostrar después de hacer scroll 200px
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Verificar scroll inicial después de un pequeño delay para asegurar que el DOM esté listo
+    setTimeout(() => {
+        handleScroll();
+    }, 100);
+
+    // Funcionalidad del botón cerrar
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            floatingSidebar.classList.remove('visible');
+            floatingSidebar.classList.add('hidden');
+            // Guardar en localStorage para recordar la preferencia
+            localStorage.setItem('sidebarClosed', 'true');
+        });
+    }
 }
 
+// ============================================
+// CONTADOR DE DÍAS EN RESEÑAS
+// ============================================
+function updateReviewDates() {
+    const reviewDates = document.querySelectorAll('.review-date[data-date-attr]');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Resetear horas para comparar solo fechas
+    
+    reviewDates.forEach(dateElement => {
+        const dateString = dateElement.getAttribute('data-date-attr');
+        if (!dateString) return;
+        
+        // Parsear fecha (formato: YYYY-MM-DD)
+        const reviewDate = new Date(dateString);
+        reviewDate.setHours(0, 0, 0, 0);
+        
+        // Calcular diferencia en días
+        const diffTime = today - reviewDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        // Formatear texto según los días
+        let dateText;
+        if (diffDays === 0) {
+            dateText = 'Hoy';
+        } else if (diffDays === 1) {
+            dateText = 'Hace 1 día';
+        } else if (diffDays < 7) {
+            dateText = `Hace ${diffDays} días`;
+        } else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            dateText = weeks === 1 ? 'Hace 1 semana' : `Hace ${weeks} semanas`;
+        } else if (diffDays < 365) {
+            const months = Math.floor(diffDays / 30);
+            dateText = months === 1 ? 'Hace 1 mes' : `Hace ${months} meses`;
+        } else {
+            const years = Math.floor(diffDays / 365);
+            dateText = years === 1 ? 'Hace 1 año' : `Hace ${years} años`;
+        }
+        
+        // Actualizar el texto
+        dateElement.textContent = dateText;
+    });
+}
+
+// ============================================
+// INICIALIZACIÓN
+// ============================================
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     startCountdown();
     showStickyBar();
+    updateReviewDates();
+    
+    // Actualizar las fechas de las reseñas cada día (cada 24 horas)
+    setInterval(updateReviewDates, 24 * 60 * 60 * 1000);
 });
 
 // ============================================

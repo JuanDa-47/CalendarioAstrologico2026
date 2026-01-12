@@ -94,6 +94,44 @@ body {
     transform: translateY(-50%) translateX(0);
 }
 
+.floating-offer-sidebar.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+.close-sidebar-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    color: var(--bg-primary);
+    border: 2px solid var(--bg-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.close-sidebar-btn:hover {
+    background: var(--color-gold-light);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.5);
+}
+
+.close-sidebar-btn:active {
+    transform: scale(0.95);
+}
+
 .floating-offer-content {
     background: linear-gradient(135deg, #1E3A5F 0%, #0A1628 100%);
     backdrop-filter: blur(15px);
@@ -113,12 +151,22 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    position: relative;
+    transition: all 0.5s ease;
 }
 
 .floating-price-old {
     font-size: 0.85rem;
     color: var(--color-text-muted);
     text-decoration: line-through;
+    transition: all 0.5s ease;
+}
+
+.floating-price-old.price-moved {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+    animation: moveToTop 0.5s ease forwards;
 }
 
 .floating-price-new {
@@ -126,6 +174,45 @@ body {
     font-weight: 600;
     color: var(--color-gold);
     font-family: var(--font-display);
+    transition: all 0.5s ease;
+}
+
+.floating-price-final {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    font-family: var(--font-display);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+}
+
+.floating-price-final.price-final-visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes moveToTop {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-20px);
+        opacity: 0.7;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .floating-countdown {
@@ -603,9 +690,10 @@ body {
     text-align: center;
     font-size: 1.1rem;
     color: var(--color-text-light);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
     font-style: italic;
 }
+
 
 .comentarios-grid {
     display: grid;
@@ -1059,6 +1147,14 @@ body {
     .floating-offer-sidebar {
         left: 10px;
         width: 160px;
+    }
+
+    .close-sidebar-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 1.2rem;
+        top: -6px;
+        right: -6px;
     }
 
     .floating-offer-content {
